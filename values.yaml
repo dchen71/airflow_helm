@@ -64,10 +64,10 @@ airflow:
   image:
     ##
     ## docker-airflow image
-    repository: puckel/docker-airflow
+    repository: dchen71/test
     ##
     ## image tag
-    tag: 1.10.9
+    tag: 0.2
     ##
     ## Image pull policy
     ## values: Always or IfNotPresent
