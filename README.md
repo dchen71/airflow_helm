@@ -1,5 +1,7 @@
 # Airflow / Celery
 
+This is a fork based on the official helm chart for Apache Airflow.  
+
 [Airflow](https://airflow.apache.org/) is a platform to programmatically author, schedule and
 monitor workflows.
 
