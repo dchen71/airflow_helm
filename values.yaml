@@ -67,11 +67,11 @@ airflow:
     repository: dchen71/test
     ##
     ## image tag
-    tag: 0.2
+    tag: latest
     ##
     ## Image pull policy
     ## values: Always or IfNotPresent
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
     ##
     ## image pull secret for private images
     pullSecret:
