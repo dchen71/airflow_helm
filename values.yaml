@@ -534,7 +534,7 @@ dags:
     url: https://github.com/dchen71/airflow-dags
     ##
     ## branch name, tag or sha1 to reset to
-    ref: master
+    ref: dev
     ## pre-created secret with key, key.pub and known_hosts file for private repos
     secret: ""
     ## The host of the repo so for example if a github repo put github.com (Only need if using ssh not https git sync)
