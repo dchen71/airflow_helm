@@ -512,7 +512,7 @@ logsPersistence:
   ## supports the `ReadWriteMany` accessMode, such as NFS or AWS EFS.
   storageClass: logging
   storageClassName: logging
-  accessMode: ReadWriteOnce
+  accessMode: ReadWriteMany
   ##
   ## Persistant storage size request
   size: 1Gi
