@@ -20,11 +20,11 @@ airflow:
   ##
   ## Extra environment variables to mount in the web, scheduler, and worker pods:
   extraEnv:
-  #  - name: AIRFLOW__CORE__FERNET_KEY
-  #    valueFrom:
-  #      secretKeyRef:
-  #        name: airflow
-  #        key: fernet_key
+    - name: AIRFLOW__CORE__FERNET_KEY
+      valueFrom:
+        secretKeyRef:
+          name: airflow-fernet-key
+          key: fernet_key
   #  - name: AIRFLOW__LDAP__BIND_PASSWORD
   #    valueFrom:
   #      secretKeyRef:
@@ -494,10 +494,10 @@ persistence:
 logsPersistence:
   ##
   ## enable persistance storage
-  enabled: false
+  enabled: true
   ##
   ## Existing claim to use
-  # existingClaim: nil
+  existingClaim: logging
   ## Existing claim's subPath to use, e.g. "logs" (optional)
   # subPath: ""
   ##
@@ -510,7 +510,8 @@ logsPersistence:
   ##
   ## A configuration for shared log storage requires a `storageClass` that
   ## supports the `ReadWriteMany` accessMode, such as NFS or AWS EFS.
-  # storageClass: default
+  storageClass: logging
+  storageClassName: logging
   accessMode: ReadWriteOnce
   ##
   ## Persistant storage size request
