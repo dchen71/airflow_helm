@@ -206,7 +206,17 @@ scheduler:
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
   nodeSelector: {}
-  affinity: {}
+  affinity: 
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 1
+        preference:
+          matchExpressions:
+          - key: agentpool
+            operator: In
+            values:
+            - agentpool
+
   tolerations: []
 
 flower:
@@ -241,7 +251,16 @@ flower:
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
   nodeSelector: {}
-  affinity: {}
+  affinity: 
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 1
+        preference:
+          matchExpressions:
+          - key: agentpool
+            operator: In
+            values:
+            - agentpool
   tolerations: []
   extraConfigmapMounts: []
   # Use-case example: adding a public certificate used for connection to a remote TLS endpoint
@@ -296,7 +315,16 @@ web:
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
   nodeSelector: {}
-  affinity: {}
+  affinity: 
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 1
+        preference:
+          matchExpressions:
+          - key: agentpool
+            operator: In
+            values:
+            - agentpool
   tolerations: []
   ##
   ## Directory in which to mount secrets on webserver nodes.
