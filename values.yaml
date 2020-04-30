@@ -343,7 +343,7 @@ workers:
   ##
   ## Autoscaling settings for workers
   autoscaling:
-    enabled: false
+    enabled: true
     maxReplicas: 2
     metrics: 
     - type: Resource
@@ -401,7 +401,16 @@ workers:
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#taints-and-tolerations-beta-feature
   nodeSelector: {}
-  affinity: {}
+  affinity: 
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 1
+        preference:
+          matchExpressions:
+          - key: agentpool
+            operator: NotIn
+            values:
+            - agentpool
   tolerations: []
 
 ##
@@ -747,7 +756,7 @@ redis:
     persistence:
       ##
       ## Use a PVC to persist data.
-      enabled: false
+      enabled: true
       ##
       ## Persistant class
       # storageClass: classname
