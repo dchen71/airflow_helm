@@ -25,6 +25,11 @@ airflow:
         secretKeyRef:
           name: airflow-fernet-key
           key: fernet_key
+    - name: AIRFLOW__KUBERNETES_ENVIRONMENT_VARIABLES__AIRFLOW__CORE__FERNET_KEY
+      valueFrom:
+         secretKeyRef:
+          name: airflow-fernet-key
+          key: fernet_key
   #  - name: AIRFLOW__LDAP__BIND_PASSWORD
   #    valueFrom:
   #      secretKeyRef:
@@ -106,7 +111,19 @@ airflow:
   ##   config:
   ##     AIRFLOW__CORE__EXPOSE_CONFIG: "True"
   ##     HTTP_PROXY: "http://proxy.mycompany.com:123"
-  config: {}
+  config: 
+    AIRFLOW__KUBERNETES__NAMESPACE: default
+    AIRFLOW__KUBERNETES__WORKER_CONTAINER_REPOSITORY: dchen71/test
+    AIRFLOW__KUBERNETES__WORKER_CONTAINER_TAG: 0.3
+    AIRFLOW__KUBERNETES__DAGS_IN_IMAGE: 'True'
+    # TODO - Fix logging 
+    # TODO - Fix kubernetes executor executing but failing
+    AIRFLOW__KUBERNETES__LOGS_VOLUME_CLAIM: logging
+    AIRFLOW__KUBERNETES__KUBE_CLIENT_REQUEST_ARGS: '{\"_request_timeout\":[60, 60]}'
+
+    
+    #AIRFLOW__KUBERNETES__LOGS_VOLUME_SUBPATH: /usr/local/airflow/logs
+    
   ##
   ## Configure pod disruption budget for the scheduler
   podDisruptionBudgetEnabled: true
