@@ -699,7 +699,7 @@ postgresql:
 
   ##
   ## The name of an existing secret that contains the postgres password.
-  existingSecret:
+  existingSecret: airflow-postgresql
 
   ## Name of the key containing the secret.
   existingSecretKey: postgresql-password
@@ -717,7 +717,7 @@ postgresql:
   ##
   ## PostgreSQL Password for the new user.
   ## If not set, a random 10 characters password will be used.
-  postgresqlPassword: airflow
+  postgresqlPassword: ""
   ##
   ## PostgreSQL Database to create.
   postgresqlDatabase: airflow
@@ -747,7 +747,7 @@ redis:
 
   ##
   ## The name of an existing secret that contains the redis password.
-  existingSecret:
+  existingSecret: airflow-redis
 
   ## Name of the key containing the secret.
   existingSecretKey: redis-password
@@ -758,7 +758,7 @@ redis:
   ##
   ## Redis password
   ##
-  password: airflow
+  password: ""
   ##
   ## Master configuration
   master:
