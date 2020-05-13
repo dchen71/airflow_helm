@@ -49,6 +49,8 @@ airflow:
     sessionAffinityConfig: {}
     type: ClusterIP
     externalPort: 8080
+    loadBalancerIP: ""
+    loadBalancerSourceRanges: []
     nodePort:
       http:
   ##
@@ -262,6 +264,8 @@ flower:
     annotations: {}
     type: ClusterIP
     externalPort: 5555
+    loadBalancerIP: ""
+    loadBalancerSourceRanges: []
 
   ## Support Node, affinity and tolerations for flower pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
@@ -288,6 +292,8 @@ flower:
   #   subPath: extra-cert.pem
 
 web:
+  ## Enable DAG serialization and do not add git-sync containers to web pods. Completely supported in Airflow >= 1.10.10
+  serializeDAGs: false
   ##
   ## Set AIRFLOW__WEBSERVER__BASE_URL
   ## Path should match Ingress configuration
@@ -316,11 +322,13 @@ web:
   initialDelaySeconds: "360"
   minReadySeconds: 120
   readinessProbe:
+    scheme: HTTP
     periodSeconds: 60
     timeoutSeconds: 1
     successThreshold: 1
     failureThreshold: 5
   livenessProbe:
+    scheme: HTTP
     periodSeconds: 60
     timeoutSeconds: 1
     successThreshold: 1
@@ -623,12 +631,16 @@ dags:
     ##
     ## branch name, tag or sha1 to reset to
     ref: dev
-    ## pre-created secret with key, key.pub and known_hosts file for private repos
-    secret: ""
-    ## The host of the repo so for example if a github repo put github.com (Only need if using ssh not https git sync)
+    ## Implicitly trust [git.repoHost]:git.repoPort, by auto populating ~/.ssh/known_hosts (only needed for ssh repos)
+    ## Note this is not needed if known_hosts is provided in git.secret
+    ## Note git.repoHost and git.repoPort are required for this to work
+    sshKeyscan: false
+    ## The host of the repo so for example if a github repo put github.com (only needed for ssh repos)
     repoHost: ""
-    ## The name of the private key in your git sync secret (Only need if using ssh not https git sync)
-    privateKeyName: ""
+    ## The port of the repo (only needed for ssh repos)
+    repoPort: 22
+    ## The name of the private key file in your git.secret (only needed for ssh repos)
+    privateKeyName: id_rsa
     gitSync:
       ## Turns on the side car container
       enabled: true
@@ -637,12 +649,12 @@ dags:
         ## docker-airflow image
         repository: alpine/git
         ## image tag
-        tag: 1.0.7
+        tag: 1.0.12
         ## Image pull policy
         ## values: Always or IfNotPresent
         pullPolicy: IfNotPresent
       ## The amount of time in seconds to git pull dags
-      refreshTime: 0
+      refreshTime: 60
       ## If using workers.autoscaling=true with git-sync, git-sync needs to have resources requested
       resources: {}
   initContainer:
@@ -664,6 +676,8 @@ dags:
     ## Path to add to `mountPath` where we clone/sync git to. Include leading /
     ## example: "/subdirWithDags"
     syncSubPath: ""
+    ## Custom resource configuration
+    resources: {}
 
 ##
 ## Configure logs
