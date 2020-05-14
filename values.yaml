@@ -120,7 +120,7 @@ airflow:
     AIRFLOW__KUBERNETES__DAGS_IN_IMAGE: 'True'
     # TODO - Fix logging 
     # TODO - Fix kubernetes executor executing but failing
-    AIRFLOW__KUBERNETES__LOGS_VOLUME_CLAIM: logging
+    AIRFLOW__KUBERNETES__LOGS_VOLUME_CLAIM: blob-storage-pv-logging
     AIRFLOW__KUBERNETES__KUBE_CLIENT_REQUEST_ARGS: '{\"_request_timeout\":[60, 60]}'
 
     
@@ -591,7 +591,7 @@ logsPersistence:
   enabled: true
   ##
   ## Existing claim to use
-  existingClaim: logging
+  existingClaim: blob-storage-pv-logging
   ## Existing claim's subPath to use, e.g. "logs" (optional)
   # subPath: ""
   ##
@@ -605,8 +605,8 @@ logsPersistence:
   ## A configuration for shared log storage requires a `storageClass` that
   ## supports the `ReadWriteMany` accessMode, such as NFS or AWS EFS.
   # TODO - Switch this back to the dynamic storage class to take care of size request issues
-  storageClass: logging
-  storageClassName: logging
+  storageClass: blob-storage-pv-logging
+  storageClassName: blob-storage-pv-logging
   accessMode: ReadWriteOnce
   ##
   ## Persistant storage size request
@@ -804,7 +804,7 @@ redis:
 # Enable this if you're using https://github.com/coreos/prometheus-operator
 # Don't forget you need to install something like https://github.com/epoch8/airflow-exporter in your airflow docker container
 serviceMonitor:
-  enabled: true
+  enabled: false
   interval: "30s"
   path: /admin/metrics
   ## [Kube Prometheus Selector Label](https://github.com/helm/charts/tree/master/stable/prometheus-operator#exporters)
