@@ -359,7 +359,7 @@ web:
 
   ## the number of web Pods to run
   ##
-  replicas: 3
+  replicas: 1
 
   ## the nodeSelector configs for the web Pods
   ##
