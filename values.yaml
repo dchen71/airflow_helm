@@ -84,7 +84,14 @@ airflow:
     AIRFLOW__CORE__SECURE_MODE: "True"
     AIRFLOW__API__AUTH_BACKEND: "airflow.api.auth.backend.deny_all"
     AIRFLOW__WEBSERVER__EXPOSE_CONFIG: "False"
-    AIRFLOW__WEBSERVER__RBAC: "False"
+    #AIRFLOW__WEBSERVER__RBAC: "True"
+    #AIRFLOW__WEBSERVER__AUTHENTICATE: "True"
+    #AIRFLOW__WEBSERVER__AUTH_BACKEND: "airflow.contrib.auth.backends.github_enterprise_auth"
+    #AIRFLOW__GITHUB_ENTERPRISE__HOST: "github.com"
+    #AIRFLOW__GITHUB_ENTERPRISE__CLIENT_ID: ""
+    #AIRFLOW__GITHUB_ENTERPRISE__CLIENT_SECRET: ""
+    #AIRFLOW__GITHUB_ENTERPRISE__OAUTH_CALLBACK_ROUTE: "oauth2/callback"
+
 
     # DAGS
     AIRFLOW__SCHEDULER__DAG_DIR_LIST_INTERVAL: "30"
@@ -198,7 +205,10 @@ scheduler:
   ##       cpu: "1000m"
   ##       memory: "1Gi"
   ##
-  resources: {}
+  resources:
+    requests:
+      cpu: "1000m"
+      memory: "1Gi"
 
   ## the nodeSelector configs for the scheduler Pods
   ##
@@ -498,14 +508,17 @@ workers:
   ##       cpu: "1000m"
   ##       memory: "2Gi"
   ##
-  resources: {}
+  resources:
+    requests:
+      cpu: "1000m"
+      memory: "2Gi"
 
   ## the number of workers Pods to run
   ##
   ## NOTE:
   ## - when `workers.autoscaling.enabled` is true, this is the minimum
   ##
-  replicas: 1
+  replicas: 2
 
   ## the nodeSelector configs for the worker Pods
   ##
@@ -560,7 +573,7 @@ workers:
   ##
   autoscaling:
     enabled: true
-    maxReplicas: 2
+    maxReplicas: 8
     metrics: 
     - type: Resource
       resource:
@@ -584,18 +597,18 @@ workers:
     ## NOTE:
     ## - sets AIRFLOW__CELERY__WORKER_CONCURRENCY
     ##
-    instances: 2
+    instances: 10
 
     ## if we should wait for tasks to finish on a celery worker before SIGTERM of Pod
     ##
     ## NOTE:
     ## - `workers.terminationPeriod` is still the overall timeout before worker Pods are killed using SIGKILL
     ##
-    gracefullTermination: false
+    gracefullTermination: true
 
   ## how many seconds to wait for tasks on a worker to finish before SIGKILL
   ##
-  terminationPeriod: 60
+  terminationPeriod: 600
 
   ## directory in which to mount secrets on worker containers
   ##
@@ -628,7 +641,10 @@ flower:
   ##       cpu: "100m"
   ##       memory: "126Mi"
   ##
-  resources: {}
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "126Mi"
 
   ## the nodeSelector configs for the flower Pods
   ##
@@ -743,7 +759,7 @@ logs:
 
     ## the size of PVC to request
     ##
-    size: 1Gi
+    size: 500Gi
 
 ###################################
 # Airflow - DAGs Configs
@@ -855,7 +871,7 @@ dags:
     ## EXAMPLE:
     ##   repoHost: "github.com"
     ##
-    repoHost: ""
+    repoHost: "github.com"
 
     ## the port of the git repo
     ##
@@ -882,7 +898,10 @@ dags:
       ##       cpu: "50m"
       ##       memory: "64Mi"
       ##
-      resources: {}
+      resources:
+        requests:
+          cpu: "50m"
+          memory: "64Mi"
 
       ## the docker image for the git-sync container
       image:
@@ -1189,7 +1208,7 @@ postgresql:
 
     ## the size of PVC to request
     ##
-    size: 16Gi
+    size: 500Gi
 
 ###################################
 # Database - External Database
@@ -1274,7 +1293,10 @@ redis:
     ##       cpu: "100m"
     ##       memory: "256Mi"
     ##
-    resources: {}
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "256Mi"
 
     ## configs for the PVC of the redis master
     ##
@@ -1307,7 +1329,10 @@ redis:
     ##       cpu: "100m"
     ##       memory: "256Mi"
     ##
-    resources: {}
+    resources:
+      requests:
+        cpu: "100m"
+        memory: "256Mi"
 
     ## configs for the PVC of the redis slaves
     ##
